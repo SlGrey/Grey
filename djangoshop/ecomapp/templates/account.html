@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h3 class="text-center">Личный кабинет {{ request.user }}</h3>
+<hr>
+<h4 class="text-center">Ваши заказы </h4>
+<table class="table">
+
+    <tr style="background: #5cb85c">
+        <td class="text-center">Номер заказа</td>
+        <td class="text-center">Дата заказа</td>
+        <td class="text-center">Статус</td>
+        <td class="text-center">Стоимость</td>
+        <td class="text-center">Детали</td>
+        {% for item in order %}
+    </tr>
+    <tr style="padding-top: 10px; padding-bottom: 10px">
+        <td class="text-center">{{ item.id }}</td>
+        <td class="text-center">{{ item.date }}</td>
+        <td class="text-center">{{ item.status }}</td>
+        <td class="text-center">{{ item.total }}</td>
+        <td class="text-center">
+            <button type="button" class="btn btn-sm"
+                    data-toggle="modal" data-target="#myModal{{ item.id }}">
+                Детали заказа
+            </button>
+        </td>
+    </tr>
+
+    {% endfor %}
+</table>
+{% for item in order %}
+<!-- Modal -->
+<div class="modal fade" id="myModal{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"></span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Заказ № {{ item.id }}</h4>
+            </div>
+            <div class="modal-body">
+                <h3>Товар</h3>
+                <table class="table">
+                    {% for order_item in item.items.items.all %}
+                    <tr>
+                        <td>{{ order_item.product.title }}</td>
+                        <td>{{ order_item.qty}}шт</td>
+                        <td>{{ order_item.item_total }} грн</td>
+                    </tr>
+                      {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td><strong>Итого</strong></td>
+                        <td><strong>{{ item.items.cart_total }} грн</strong></td>
+                    </tr>
+
+                </table>
+                <h3>Заказчик</h3>
+
+                <p class="text-center">Имя: {{ item.first_name }}</p>
+                <p class="text-center">Фамилия: {{ item.last_name }}</p>
+                <p class="text-center">Телефон: {{ item.phone }}</p>
+                <h3>Тип доставки:</h3>
+                <p>{% if item.buying_type == "self" %}Самовывоз{%else%}Доставка{%endif%}</p>
+                <p>{% if item.buying_type == "delivery" %}{{ item.address }}{% endif %} </p>
+                <h3>Коментарии к заказу: </h3>
+                <p>{{ item.comments }}</p>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}
