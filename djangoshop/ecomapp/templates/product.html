@@ -5,8 +5,8 @@
     <img src="{{ product.image.url }}" style='width:80%; height: 80%;'>
 </div>
 <div class="col-sm-8">
-    <h3 class="text-center">{{ product.title }}</h3>
-    <p>{{ product.description }}</p>
+    <h3 class="text-center" >{{ product.title }}</h3>
+    <p>{{ product.description|safe }}</p>
 
     <hr>
     <p>Цена: <strong>{{ product.price}}</strong></p>

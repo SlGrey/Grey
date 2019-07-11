@@ -4,7 +4,6 @@ from django.contrib.auth.models import User
 
 
 class LoginForm(forms.Form):
-
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
 
@@ -71,10 +70,9 @@ class RegForm(forms.ModelForm):
 
 
 class OrderForm(forms.Form):
-
     name = forms.CharField()
     last_name = forms.CharField(required=False)
-    phone = forms.CharField()
+    phone = forms.DecimalField()
     buying_type = forms.ChoiceField(
         widget=forms.Select(),
         choices=([("self", "Самовывоз"), ("delivery", "Доставка")]))
@@ -95,3 +93,8 @@ class OrderForm(forms.Form):
         self.fields["comments"].label = "Коментарии к заказу"
         self.fields["date"].label = "Дата доставки"
         self.fields["date"].help_text = "Доставка производится на следущий день после заказа"
+
+    # def clean(self):
+    #     phone = self.cleaned_data["phone"]
+    #     if len(str(phone)) != 11:
+    #         raise forms.ValidationError("Пожалуста введите корректный номер телефона")

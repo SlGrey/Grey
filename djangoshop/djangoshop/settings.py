@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "ecomapp",
     "crispy_forms",
+    "ckeditor",
 ]
 
 MIDDLEWARE = [
@@ -130,5 +131,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static_in_dev"),
 )
 
-
 CRISPY_TEMPLATE_PACK = "bootstrap3"
+
+CKEDITOR_UPLOAD_PATH = (os.path.join(BASE_DIR, "static_in_dev"))
+CKEDITOR_RESTRICT_BY_USER = True

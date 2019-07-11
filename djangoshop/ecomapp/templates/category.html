@@ -8,7 +8,9 @@
     <div class="col-sm-4">
         <a herf="{{ product_get_absolut_url }}"></a>
         <img src="{{ product.image.url }}" style="width: 80%; height: 80%;">
-        <h4 class="text-center">{{ product.title }}</h4>
+        <h4 class='text-center'><a href="{{ product.get_absolute_url }}">
+                                    {{ product.title }}</a>
+        </h4>
         <p class="text-center" style="font-size: 20px">Цена: <strong>{{ product.price }} грн</strong> </p>
      {% if request.user.is_authenticated %}
     <p class="text-center"><a href="#" class="add_to_cart" data-slug="{{ product.slug }}">

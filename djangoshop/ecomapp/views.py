@@ -23,7 +23,7 @@ def base_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -32,8 +32,11 @@ def base_view(request):
 
     categories = Category.objects.all()
     n_products = Product.objects.all().count()
-    s_products = sample(range(1, n_products), 6)
-    products = Product.objects.filter(id__in=s_products)
+    if n_products >= 6:
+        s_products = sample(range(1, n_products), 6)
+        products = Product.objects.filter(id__in=s_products)
+    else:
+        products = Product.objects.all()
     context = {
         "categories": categories,
         "products": products,
@@ -48,7 +51,7 @@ def product_view(request, product_slug):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -82,7 +85,7 @@ def cart_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -101,7 +104,7 @@ def add_to_cart_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -125,7 +128,7 @@ def remove_from_cart_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -149,7 +152,7 @@ def change_item_qty(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -170,7 +173,7 @@ def checkout_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -189,7 +192,7 @@ def order_create_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id
@@ -210,7 +213,7 @@ def make_order_view(request):
         cart_id = request.session["cart_id"]
         cart = Cart.objects.get(id=cart_id)
         request.session["total"] = cart.items.count()
-    except:
+    except KeyError:
         cart = Cart()
         cart.save()
         cart_id = cart.id

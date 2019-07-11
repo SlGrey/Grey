@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.urls import reverse
 from transliterate import translit
 from decimal import Decimal
+from ckeditor.fields import RichTextField
 
 
 # Create your models here.
@@ -53,7 +54,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     slug = models.SlugField()
-    description = models.TextField()
+    description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=image_folder)
     price = models.DecimalField(max_digits=9, decimal_places=2)
     available = models.BooleanField(default=True)
