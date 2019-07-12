@@ -6,7 +6,8 @@ from django.http import JsonResponse, HttpResponseRedirect
 from ecomapp.forms import (
     OrderForm,
     RegForm,
-    LoginForm
+    LoginForm,
+    ProductFilterForm,
 )
 from ecomapp.models import (
     Category,
@@ -29,21 +30,40 @@ def base_view(request):
         cart_id = cart.id
         request.session["cart_id"] = cart_id
         cart = Cart.objects.get(id=cart_id)
-
+    form = ProductFilterForm(request.GET)
     categories = Category.objects.all()
-    n_products = Product.objects.all().count()
-    if n_products >= 6:
-        s_products = sample(range(1, n_products), 6)
-        products = Product.objects.filter(id__in=s_products)
-    else:
-        products = Product.objects.all()
-    context = {
-        "categories": categories,
-        "products": products,
-        "cart": cart
 
-    }
-    return render(request, "base.html", context)
+    if form.is_valid():
+        products = Product.objects.all()
+        if form.cleaned_data["min_price"]:
+            products = products.filter(price__gte=form.cleaned_data["min_price"])
+        if form.cleaned_data["max_price"]:
+            products = products.filter(price__lte=form.cleaned_data["max_price"])
+        context = {
+            "categories": categories,
+            "products": products,
+            "cart": cart,
+            "form": form,
+        }
+
+        if form.cleaned_data["min_price"] is None and form.cleaned_data["max_price"] is None:
+            n_products = Product.objects.all().count()
+            if n_products >= 6:
+                s_products = sample(range(1, n_products), 6)
+                products = Product.objects.filter(id__in=s_products)
+            else:
+                products = Product.objects.all()
+            context = {
+                "categories": categories,
+                "products": products,
+                "cart": cart,
+                "form": form,
+            }
+
+            return render(request, "base.html", context)
+        else:
+
+            return render(request, "search.html", context)
 
 
 def product_view(request, product_slug):

@@ -94,7 +94,7 @@ class OrderForm(forms.Form):
         self.fields["date"].label = "Дата доставки"
         self.fields["date"].help_text = "Доставка производится на следущий день после заказа"
 
-    # def clean(self):
-    #     phone = self.cleaned_data["phone"]
-    #     if len(str(phone)) != 11:
-    #         raise forms.ValidationError("Пожалуста введите корректный номер телефона")
+
+class ProductFilterForm(forms.Form):
+    min_price = forms.IntegerField(label=" Цена  от ", required=False)
+    max_price = forms.IntegerField(label="Цена  до ", required=False)
