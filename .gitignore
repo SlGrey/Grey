@@ -3,3 +3,5 @@ __pycache__/
 eComEnv/
 product_images/
 venv/
+*.sqlite3
+
