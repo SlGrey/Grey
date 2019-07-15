@@ -54,6 +54,7 @@ class Product(models.Model):
     brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
     title = models.CharField(max_length=120)
     slug = models.SlugField()
+    amper = models.PositiveIntegerField(blank=True)
     description = RichTextField(null=True, blank=True)
     image = models.ImageField(upload_to=image_folder)
     price = models.DecimalField(max_digits=9, decimal_places=2)

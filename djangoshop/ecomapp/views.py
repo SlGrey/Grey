@@ -39,6 +39,10 @@ def base_view(request):
             products = products.filter(price__gte=form.cleaned_data["min_price"])
         if form.cleaned_data["max_price"]:
             products = products.filter(price__lte=form.cleaned_data["max_price"])
+        if form.cleaned_data["min_amp"]:
+            products = products.filter(amper__gte=form.cleaned_data["min_amp"])
+        if form.cleaned_data["max_amp"]:
+            products = products.filter(amper__lte=form.cleaned_data["max_amp"])
         context = {
             "categories": categories,
             "products": products,
@@ -46,7 +50,9 @@ def base_view(request):
             "form": form,
         }
 
-        if form.cleaned_data["min_price"] is None and form.cleaned_data["max_price"] is None:
+        if form.cleaned_data["min_price"] is None and form.cleaned_data["max_price"] is None \
+                and form.cleaned_data["min_amp"] is "" \
+                and form.cleaned_data["max_amp"] is "":
             n_products = Product.objects.all().count()
             if n_products >= 6:
                 s_products = sample(range(1, n_products), 6)
@@ -62,7 +68,6 @@ def base_view(request):
 
             return render(request, "base.html", context)
         else:
-
             return render(request, "search.html", context)
 
 

@@ -47,6 +47,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
                 {% if not request.get_full_path == "/" %}
+
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
                        aria-haspopup="true"
@@ -56,7 +57,6 @@
                         <li><a href="{{ category.get_absolute_url }}">{{ category.name }}</a></li>
                         {% endfor %}</ul></li>
                 {% endif %}
-
                 {% if not request.user.is_authenticated %}
                 <li>
                   <p class="navbar-text">Здравствуйте, Гость!</p>
@@ -110,7 +110,7 @@
 
             </div>
             <br>
-            <h4>Cортировать по:</h4>
+            <h4> Фильтрация:</h4>
             <form action="" method="get">
                 {{ form.as_p }}
                 <input type="submit" value="Поиск" class="btn btn-success">

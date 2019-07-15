@@ -98,3 +98,14 @@ class OrderForm(forms.Form):
 class ProductFilterForm(forms.Form):
     min_price = forms.IntegerField(label=" Цена  от ", required=False)
     max_price = forms.IntegerField(label="Цена  до ", required=False)
+    choices = [
+        ["", " "],
+        ["16", "16A"],
+        ["20", "20A"],
+        ["32", "32A"],
+        ["40", "40A"],
+        ["50", "50A"],
+        ["63", "63A"],
+    ]
+    min_amp = forms.ChoiceField(label="Сила тока от", required=False, choices=choices)
+    max_amp = forms.ChoiceField(label="Сила тока до", required=False, choices=choices)
