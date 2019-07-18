@@ -130,7 +130,7 @@ class Order(models.Model):
     total = models.DecimalField(max_digits=9, decimal_places=2, default=0.00)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
-    phone = models.CharField(max_length=14)
+    phone = models.CharField(max_length=14, null=True)
     address = models.CharField(max_length=150)
     buying_type = models.CharField(max_length=40, choices=((
         ("Самовывоз", "Самовывоз"), ("Доставка", "Доставка"))), default="Самовывоз")

@@ -255,6 +255,8 @@ def make_order_view(request):
         buying_type = form.cleaned_data["buying_type"]
         address = form.cleaned_data["address"]
         comments = form.cleaned_data["comments"]
+        if not comments:
+            comments = "No comments"
         mew_oder = Order.objects.create(
             user=request.user,
             items=cart,
