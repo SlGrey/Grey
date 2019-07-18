@@ -16,6 +16,7 @@ from ecomapp.views import (
     account_view,
     registration_view,
     login_view,
+    change_account,
 )
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
     url(r"^account/$", account_view, name="account"),
     url(r"^registration/$", registration_view, name="registration"),
     url(r"^login/$", login_view, name="login"),
+    url(r"^account_update/$", change_account, name="account_update"),
     url(r"^logout/$", LogoutView.as_view(next_page=reverse_lazy("base")), name="logout"),
     url(r"^$", base_view, name="base"),
 ]

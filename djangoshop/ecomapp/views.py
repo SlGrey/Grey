@@ -3,11 +3,13 @@ from random import sample
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.http import JsonResponse, HttpResponseRedirect
+from django.contrib.auth.models import User
 from ecomapp.forms import (
     OrderForm,
     RegForm,
     LoginForm,
     ProductFilterForm,
+    ChangeAccountForm,
 )
 from ecomapp.models import (
     Category,
@@ -267,7 +269,7 @@ def make_order_view(request):
         del request.session["cart_id"]
         del request.session["total"]
         return HttpResponseRedirect(reverse('thank_you'))
-    return render(request, "order.html", {"categories": categories})
+    return render(request, "order.html", {"categories": categories, "form": form})
 
 
 def account_view(request):
@@ -331,3 +333,37 @@ def login_view(request):
         "categories": categories,
     }
     return render(request, "login.html", context)
+
+
+def change_account(request):
+    categories = Category.objects.all()
+    account = User.objects.get(username=request.user)
+    form = ChangeAccountForm(instance=account)
+    context = {
+        "account": account,
+        "form": form,
+        "categories": categories,
+    }
+    if request.method == "POST":
+        form = ChangeAccountForm(request.POST)
+        if form.is_valid():
+            account.username = form.cleaned_data["username"]
+            account.password = form.cleaned_data["password"]
+            account.email = form.cleaned_data["email"]
+            account.first_name = form.cleaned_data["first_name"]
+            account.last_name = form.cleaned_data["last_name"]
+            password = form.cleaned_data["password"]
+            username = form.cleaned_data["username"]
+            account.set_password(password)
+            account.save()
+            login_user = authenticate(username=username, password=password)
+            if login_user:
+                login(request, login_user)
+
+            return HttpResponseRedirect(reverse("base"))
+        else:
+
+            return render(request, "account_update.html", context)
+
+    else:
+        return render(request, "account_update.html", context)

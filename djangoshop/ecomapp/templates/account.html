@@ -74,8 +74,13 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Закрыть</button>
             </div>
+
         </div>
     </div>
 </div>
 {% endfor %}
+ <div>
+     <a href="{% url 'account_update' %}">
+         <button class='btn btn-primary'>Изменить личные данные</button></a>
+ </div>
 {% endblock content %}
