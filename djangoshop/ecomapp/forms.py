@@ -1,7 +1,6 @@
 from django import forms
 from django.utils import timezone
 from django.contrib.auth.models import User
-import copy
 
 
 class LoginForm(forms.Form):
@@ -88,7 +87,7 @@ class ChangeAccountForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChangeAccountForm, self).__init__(*args, **kwargs)
-        self.Meta.model.current_name = self.instance
+        self.current = self.instance
         self.fields["username"].label = "Логин"
         self.fields["password"].label = "Пароль"
         self.fields["password"].help_text = "Введите пароль"
@@ -99,7 +98,8 @@ class ChangeAccountForm(forms.ModelForm):
         self.fields["email"].help_text = "Пожалуйста укажите реальный адрес"
 
     def clean(self):
-        current_user = str(self.Meta.model.current_name)
+        current_user = str(self.current)
+        print(current_user)
         username = self.cleaned_data["username"]
         password = self.cleaned_data["password"]
         password_check = self.cleaned_data["password_check"]
@@ -171,7 +171,7 @@ class OrderForm(forms.Form):
 
 class ProductFilterForm(forms.Form):
     min_price = forms.IntegerField(label=" Цена  от ", required=False)
-    max_price = forms.IntegerField(label="Цена  до ", required=False)
+    max_price = forms.IntegerField(label=" Цена  до ", required=False)
     choices = [
         ["", " "],
         ["16", "16A"],
