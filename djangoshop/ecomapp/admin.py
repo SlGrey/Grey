@@ -14,7 +14,7 @@ def make_payed(modeladmin, request, queryset):
     make_payed.short_description = "Пометить как оплаченый"
 
 
-def make_in_progres(modeladmin, request, queryset):
+def make_in_progres(ModelAdmn, request, queryset):
     queryset.update(status="Выполняется")
     make_payed.short_description = "Пометить как выполняется"
 

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from random import sample
+from django import forms
 from django.urls import reverse
 from django.contrib.auth import login, authenticate
 from django.http import JsonResponse, HttpResponseRedirect
@@ -341,13 +342,8 @@ def change_account(request):
     categories = Category.objects.all()
     account = User.objects.get(username=request.user)
     form = ChangeAccountForm(instance=account)
-    context = {
-        "account": account,
-        "form": form,
-        "categories": categories,
-    }
     if request.method == "POST":
-        form = ChangeAccountForm(request.POST)
+        form = ChangeAccountForm(request.POST, instance=account)
         if form.is_valid():
             account.username = form.cleaned_data["username"]
             account.password = form.cleaned_data["password"]
@@ -364,8 +360,17 @@ def change_account(request):
 
             return HttpResponseRedirect(reverse("base"))
         else:
-
+            context = {
+                "account": account,
+                "form": form,
+                "categories": categories,
+            }
             return render(request, "account_update.html", context)
 
     else:
+        context = {
+            "account": account,
+            "form": form,
+            "categories": categories,
+        }
         return render(request, "account_update.html", context)

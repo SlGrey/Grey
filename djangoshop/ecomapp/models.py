@@ -140,4 +140,3 @@ class Order(models.Model):
 
     def __str__(self):
         return "Заказ № {0}".format(str(self.id))
-

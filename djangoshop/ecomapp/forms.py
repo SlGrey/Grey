@@ -1,6 +1,7 @@
 from django import forms
 from django.utils import timezone
 from django.contrib.auth.models import User
+import copy
 
 
 class LoginForm(forms.Form):
@@ -75,6 +76,7 @@ class ChangeAccountForm(forms.ModelForm):
 
     class Meta:
         model = User
+
         fields = [
             "username",
             "password",
@@ -86,6 +88,7 @@ class ChangeAccountForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ChangeAccountForm, self).__init__(*args, **kwargs)
+        self.Meta.model.current_name = self.instance
         self.fields["username"].label = "Логин"
         self.fields["password"].label = "Пароль"
         self.fields["password"].help_text = "Введите пароль"
@@ -96,24 +99,26 @@ class ChangeAccountForm(forms.ModelForm):
         self.fields["email"].help_text = "Пожалуйста укажите реальный адрес"
 
     def clean(self):
+        current_user = str(self.Meta.model.current_name)
         username = self.cleaned_data["username"]
         password = self.cleaned_data["password"]
         password_check = self.cleaned_data["password_check"]
         first_name = self.cleaned_data["first_name"]
         last_name = self.cleaned_data["last_name"]
         email = self.cleaned_data["email"]
+        current_email = User.objects.get(username=current_user).email
+        if current_user != username and User.objects.filter(username=username).exists():
+            raise forms.ValidationError("Пользователь с таким логином уже зарегистрирован")
         if password != password_check:
             raise forms.ValidationError("Пароли не совпадают!")
         if not first_name:
-            raise forms.ValidationError(" Пожалуйста укажите Ваше имя")
+            raise forms.ValidationError("Пожалуйта укжите Ваше имя")
         if not last_name:
             raise forms.ValidationError(" Пожалуйста укажите Вашу фамилию")
         if not email:
             raise forms.ValidationError(" Пожалуйста укажите Вашу почту")
-        print(self.fields["username"])
-        # if self.fields["username"] != username:
-        #     if User.objects.filter(username=username).exists():
-        #         raise forms.ValidationError("Пользователь с таким логином уже зарегистрирован")
+        if current_email != email and User.objects.filter(email=email).exists():
+            raise forms.ValidationError("Пользователь с таким email-oм уже зарегистрирован")
 
 
 class OrderForm(forms.Form):
@@ -178,5 +183,3 @@ class ProductFilterForm(forms.Form):
     ]
     min_amp = forms.ChoiceField(label="Сила тока от", required=False, choices=choices)
     max_amp = forms.ChoiceField(label="Сила тока до", required=False, choices=choices)
-
-
